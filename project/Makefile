@@ -5,7 +5,7 @@ CFLAGS          = -mmcu=${CPU} -Os -I../h
 LDFLAGS 	= -L/opt/ti/msp430_gcc/include -L../lib 
 #switch the compiler (for the internal make rules)
 CC              = msp430-elf-gcc
-AS              = msp430-elf-as
+AS              = msp430-elf-gcc -mmcu=${CPU} -c
 AR              = msp430-elf-ar
 
 libLcd.a: font-11x16.o font-5x7.o font-8x12.o lcdutils.o lcddraw.o
@@ -28,8 +28,14 @@ lcddemo.elf: lcddemo.o libLcd.a
 lcdx.elf: lcdx.o libLcd.a
 	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@ -lTimer -lLcd -lp2sw
 
-load: lcddemo.elf
+jurrasiclcd.elf: jurrasiclcd.o wdt_handlerj.o libLcd.a
+	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@ -lTimer -lLcd -lp2sw
+
+loado: lcddemo.elf
 	msp430loader.sh $^
 
 loadx: lcdx.elf
+	msp430loader.sh $^
+
+loadj: jurrasiclcd.elf
 	msp430loader.sh $^
