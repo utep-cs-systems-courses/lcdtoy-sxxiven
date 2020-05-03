@@ -33,7 +33,7 @@ void play_note()
   if(playing_note %3 == 0) //toggles the animation every third note
     animate();
   delay = music_score[playing_note][1];
-  //buzzer_set_period(music_score[playing_note][0]);
+  buzzer_set_period(music_score[playing_note][0]);
 }
 
 //this function animates the t-rex using two different position for the arms and mouth
