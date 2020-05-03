@@ -6,8 +6,6 @@
 
 char SW0_DOWN, SW1_DOWN, SW2_DOWN, SW3_DOWN, state, switch_state_changed, donut_enable;
     //section;
-//char switch_state_down2, switch_state_down3, jurrasic_enable, siren_enable; 
-//unsigned char count_on;
 
 static char
 switch_update_interrupt_sense()
@@ -30,6 +28,7 @@ switch_init()                   /* setup switches */
   //led_update(); 
 }
 
+//updates the enables according to the state set
 void set_enables(char jurrasic, char donut)
 {
   jurrasic_enable = jurrasic;
@@ -46,58 +45,10 @@ switch_interrupt_handler()
   SW3_DOWN = (p2val & SW3) ? 0 : 1; /* when SW3 is up */
   switch_state_changed = 1;
 
+  //below updates the staes according to which button are pressed
   if(SW0_DOWN){ state = 0; set_enables(0, 0);}
   if(SW1_DOWN){ state = 4; set_enables(0, 1);}
   if(SW2_DOWN){ state = 2; set_enables(1, 0);}
   if(SW3_DOWN){ state = 3; set_enables(0, 0);}
   if(!SW1_DOWN && donut_enable){state = 1;}
-  //  if(SW0_DOWN && SW3_DOWN){ state = 4;}
-  
-  /*// Button 0 enables the count_on for the S.O.S message
-  if(switch_state_down0)
-  {
-     section =1;
-    reps = 0; 
-    count_on = 1;
-    jurrasic_enable = 0;
-    siren_enable = 0;
-  }
-
-  // Button 1 enables the siren_enable for the siren
-  if(switch_state_down)
-  {
-    
-    section = 2;
-    reps = 0;
-    count_on = 0;
-    siren_enable = 1;
-    jurrasic_enable = 0; 
-      
-}
-
-  // Button 2 enables the jurrasic_enable to play the jurrasic theme song
-  if(switch_state_down2)
-  {
-    
-    section = 0;
-    playing_note =0; 
-    jurrasic_enable = 1;
-    //count_on = 0;
-    siren_enable = 0;
-     
-  }
-
-  // Button 3 disables all to stop all current states
-  if(switch_state_down3)
-  {
-    
-    buzzer_set_period(0);
-    green_led = 0; 
-    count_on = 0;
-    jurrasic_enable = 0;
-    siren_enable = 0;
-    disable_all = 1;
-      
-    }*/
-  //led_update();
-}
+ }

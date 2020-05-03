@@ -12,6 +12,7 @@ libLcd.a: font-5x7.o lcdutils.o lcddraw.o
 	$(AR) crs $@ $^
 
 lcddraw.o: lcddraw.c lcddraw.h lcdutils.h
+
 lcdutils.o: lcdutils.c lcdutils.h
 
 install: libLcd.a
@@ -22,26 +23,8 @@ install: libLcd.a
 clean:
 	rm -f libLcd.a *.o *.elf
 
-lcddemo.elf: lcddemo.o libLcd.a 
-	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@ -lTimer 
-
-lcdx.elf: lcdx.o libLcd.a
-	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@ -lTimer -lLcd -lp2sw
-
-load.elf: main.o switches.o buzzer.o stateMachine.o wdInterruptHandler.o p2_interrupt_handler.o renderings.o libLcd.a
-	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@ -lTimer -lLcd -lp2sw
-
-jurrasiclcd.elf: jurrasiclcd.o wdt_handlerj.o libLcd.a
+load.elf: main.o switches.o buzzer.o stateMachine.o wdt_handler.o  p2_interrupt_handler.o renderings.o libLcd.a
 	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@ -lTimer -lLcd -lp2sw
 
 load: load.elf
-	msp430loader.sh $^
-
-loado: lcddemo.elf
-	msp430loader.sh $^
-
-loadx: lcdx.elf
-	msp430loader.sh $^
-
-loadj: jurrasiclcd.elf
 	msp430loader.sh $^
