@@ -8,7 +8,7 @@ CC              = msp430-elf-gcc
 AS              = msp430-elf-gcc -mmcu=${CPU} -c
 AR              = msp430-elf-ar
 
-libLcd.a: font-11x16.o font-5x7.o font-8x12.o lcdutils.o lcddraw.o
+libLcd.a: font-5x7.o lcdutils.o lcddraw.o
 	$(AR) crs $@ $^
 
 lcddraw.o: lcddraw.c lcddraw.h lcdutils.h
@@ -28,8 +28,14 @@ lcddemo.elf: lcddemo.o libLcd.a
 lcdx.elf: lcdx.o libLcd.a
 	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@ -lTimer -lLcd -lp2sw
 
+load.elf: main.o switches.o buzzer.o stateMachine.o wdInterruptHandler.o p2_interrupt_handler.o renderings.o libLcd.a
+	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@ -lTimer -lLcd -lp2sw
+
 jurrasiclcd.elf: jurrasiclcd.o wdt_handlerj.o libLcd.a
 	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@ -lTimer -lLcd -lp2sw
+
+load: load.elf
+	msp430loader.sh $^
 
 loado: lcddemo.elf
 	msp430loader.sh $^
