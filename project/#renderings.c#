@@ -1,0 +1,47 @@
+#include <msp430.h>
+#include <lcdutils.h>
+#include <lcddraw.h>
+#include "renderings.h"
+
+void drawTriangle(u_char rowOff, u_char colOff, u_char width, u_char height,
+	       u_char rowJump, u_char colJump, u_char opperation,  u_int colorBGR)
+{
+  u_char r, c, colLeft, colRight;
+
+  for(r = 0; r <= height; r+=rowJump)
+  {
+    colLeft = 0;
+    colRight = r*width;
+    for(c = colLeft; c <= colRight; c+= colJump)
+    {
+      switch (opperation)
+      {
+      case 0: //both offsets are adding
+	drawPixel(colOff+c, rowOff+r, colorBGR); break;
+      case 1: // only column offset is adding
+	drawPixel(colOff+c, rowOff-r, colorBGR); break;
+      case 2: // only row offset is adding
+	drawPixel(colOff-c, rowOff+r, colorBGR); break;
+      case 3: //both offsets are subtracting
+	drawPixel(colOff-c, rowOff-r, colorBGR); break; 
+      }
+    }
+  }
+}
+
+void drawBox(u_char rowOff, u_char colOff, u_char width, u_char height,
+	     u_char rowJump, u_char colJump, u_int colorBGR)
+{
+  u_char r, c;
+
+  for(r = 0; r <= height; r+=rowJump)
+  {
+    for(c = 0; c <= width; c+=colJump)
+    {
+      drawPixel(colOff+c, rowOff+r, colorBGR);
+    }
+  }
+}
+
+ 
+}
